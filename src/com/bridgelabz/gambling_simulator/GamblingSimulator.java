@@ -1,40 +1,44 @@
 package com.bridgelabz.gambling_simulator;
 
-import java.util.Random;
-
 public class GamblingSimulator {
-
-    public static final int initialStake = 100;
-    public static final int stakeBet = 1;
-    public static final float percentage = (initialStake / 100) * 50;
-    public static final float highestStake = percentage + initialStake;
-    public static final float lowestStake = percentage - initialStake;
+    public static final int STAKE = 100;
+    public static final int BET = 1;
+    public static final int PERCENTAGE_50_STAKE = (STAKE/100)*50;
+    public static final int HIGH_LIMIT = STAKE + PERCENTAGE_50_STAKE;
+    public static final int LOW_LIMIT = STAKE - PERCENTAGE_50_STAKE;
+    public static final int START_DAY = 1;
+    public static final int MAX_DAY = 20;
+    public static final int STAKES_PER_DAY = 50;
+    public static final int START_DOLLARS = 0;
 
     public static void main(String[] args) {
 
-        Random random = new Random();
-        int totalStake = initialStake;
+        int days ;
+        int totalDollars = START_DOLLARS;
 
-        while (totalStake < highestStake && totalStake > lowestStake) {
-            int play = random.nextInt(2);
+        for (days = START_DAY; days <= MAX_DAY; days++) {
+            int totalStake = STAKE;
 
-            switch (play) {
-
-                case 0:
-                    totalStake = totalStake - stakeBet;
-                    System.out.println("Stake after loosing: " + totalStake);
-                    break;
-
-                case 1:
-                    totalStake = totalStake + stakeBet;
-                    System.out.println("Stake after winning: " + totalStake);
-                    break;
+            while (totalStake < HIGH_LIMIT && totalStake > LOW_LIMIT) {
+                int luck = (int) (Math.random() * 10) % 2;
+                if (luck == 1) {
+                    totalStake = totalStake + BET;
+                } else {
+                    totalStake = totalStake - BET;
+                }
             }
-
+            if (totalStake == HIGH_LIMIT) {
+                totalDollars += STAKES_PER_DAY;
+                System.out.println("Gambler won by: " + totalDollars +"   dollars on day: " + days);
+            } else {
+                totalDollars -= STAKES_PER_DAY;
+                System.out.println("Gambler lost by: " + totalDollars +"   dollars on day: " + days);
+            }
         }
-        if (totalStake == highestStake)
-            System.out.println("Gambler won by: " + totalStake);
-        else
-            System.out.println("Gambler lost by: " + totalStake);
+        if (totalDollars > START_DOLLARS) {
+            System.out.println("Gambler won: " + totalDollars);
+        } else {
+            System.out.println("Gambler lost: " + totalDollars);
+        }
     }
 }
